@@ -1,0 +1,17 @@
+.card {
+    padding: 20px;
+    border: 1px solid green;
+    /* width: 20%; */
+}
+
+.card img{
+    width: 200px;
+    height: 300px;
+
+}
+
+.card-buttons{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
