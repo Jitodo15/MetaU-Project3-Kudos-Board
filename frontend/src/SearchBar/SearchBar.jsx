@@ -1,9 +1,15 @@
 import "./SearchBar.css"
 
-function SearchBar(){
+function SearchBar(props){
+
+    function handleInputChange(event){
+        props.handleSearchChange(event.target.value)
+    }
+
+
     return(
         <div className="searchbar">
-            <input type="text" placeholder="Search boards..." />
+            <input type="text" value={props.searchQuery} placeholder="Search boards..." onChange={handleInputChange} />
         </div>
 
     )

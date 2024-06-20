@@ -1,6 +1,6 @@
-import "./Button.css"
+import "./CreateButton.css"
 
-function Button(props){
+function CreateButton(props){
     return (
         <button onClick={() =>
             {props.name.includes("Create") ? props.displayForm():null}
@@ -9,4 +9,4 @@ function Button(props){
     )
 }
 
-export default Button;
+export default CreateButton;
