@@ -9,7 +9,7 @@ function CommentForm({cardId, displayForm, authorId, refreshComments}){
 
         event.preventDefault();
         try{
-            const response = await fetch(`http://localhost:3000/cards/${cardId}/comments`,{
+            const response = await fetch(`${import.meta.VITE_BACKEND_URL}/cards/${cardId}/comments`,{
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
