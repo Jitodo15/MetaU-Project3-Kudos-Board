@@ -11,7 +11,6 @@ function SearchBar(props){
         <div className="searchbar">
             <input type="text" value={props.searchQuery} placeholder="Search boards..." onChange={handleInputChange} />
         </div>
-
     )
 
 }

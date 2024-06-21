@@ -6,3 +6,15 @@
     align-items: center;
     padding: 20px;
 }
+
+.back-arrow {
+    padding: 10px;
+    background-color:rgb(200, 162, 162);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.back-arrow i {
+    color: white;
+}

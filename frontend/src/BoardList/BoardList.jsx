@@ -14,7 +14,14 @@ function BoardList(props){
     function displayBoard(board){
         return(
 
-            <Board key={board.id} deleteBoard={() => props.deleteBoard(board.id)} displayBoard={() => handleBoardClick(board.id)} image_url={board.image_url} title={board.title} category={board.category} handleSetBoardId={() => props.handleSetBoardId(board.id)} />
+            <Board
+                key={board.id}
+                deleteBoard={() => props.deleteBoard(board.id)}
+                displayBoard={() => handleBoardClick(board.id)}
+                image_url={board.image_url} title={board.title}
+                category={board.category}
+                handleSetBoardId={() => props.handleSetBoardId(board.id)}
+            />
         )
 
     }

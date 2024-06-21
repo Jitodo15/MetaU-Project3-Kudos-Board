@@ -6,7 +6,7 @@ function CommentForm({cardId, displayForm, authorId, refreshComments}){
     const [content, setContent] = useState('');
 
     async function handleSubmit(event){
-        console.log("hi")
+
         event.preventDefault();
         try{
             const response = await fetch(`http://localhost:3000/cards/${cardId}/comments`,{

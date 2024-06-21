@@ -19,7 +19,8 @@ app.use(cors());
 
 
 async function getGif(category) {
-    const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.API_KEY}&tag=${category}&rating=g`,
+    const response = await fetch(
+        `https://api.giphy.com/v1/gifs/random?api_key=${process.env.API_KEY}&tag=${category}&rating=g`,
     {
         method: 'GET',
         headers: {
@@ -60,7 +61,6 @@ app.post("/boards", async (req, res) => {
             data: {
                 title,
                 category,
-                // author,
                 image_url,
             }
         })
@@ -117,7 +117,6 @@ app.post("/boards/:boardId/cards", async (req, res) => {
         const newCard = await prisma.card.create({
             data: {
                 message,
-                // author,
                 image_url,
                 upVote : 0,
                 board: {connect: {id: parseInt(boardId)}}
@@ -184,7 +183,6 @@ app.post('/cards/:cardId/comments', async(req,res) =>{
         const newComment = await prisma.comment.create({
             data: {
                 content,
-                // author: {connect: {id: authorId}},
                 card: {connect: {id: cardId}}
             }
         });
@@ -198,16 +196,15 @@ app.post('/cards/:cardId/comments', async(req,res) =>{
 app.get('/cards/:cardId/comments', async(req,res) =>{
     const cardId = parseInt(req.params.cardId);
 
-    // try{
+    try{
         const comments = await prisma.comment.findMany({
             where: {cardId},
-            // include: {author: true}
         });
         res.json(comments)
 
-    // } catch(err){
-    //     res.status(500).json({err: 'Internal Server Error'})
-    // }
+    } catch(err){
+        res.status(500).json({err: 'Internal Server Error'})
+    }
 })
 
 app.post('/signup', async (req, res)=> {

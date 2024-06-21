@@ -68,7 +68,6 @@ function CreateForm(props) {
                   <input type="text" placeholder="Title" />
                   <select name="category">
                       <option value="public">Select a category</option>
-                      <option value="recent">Recent</option>
                       <option value="celebration">Celebration</option>
                       <option value="thank you">Thank You</option>
                       <option value="inspiration">Inspiration</option>

@@ -32,7 +32,6 @@ function CommentList(props){
 
                     <div key={comment.id}>
                         <p>{comment.content}</p>
-                        {/* <small>by {comment.author.username}</small> */}
                     </div>
 
 

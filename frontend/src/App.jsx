@@ -6,8 +6,8 @@ import Footer from './Footer/Footer';
 import CreateForm from './CreateForm/CreateForm';
 import CardList from './CardList/CardList';
 import Home from './Home/Home';
-import LogIn from './LogIn/LogIn';
-import SignUp from './SignUp/SignUp';
+
+
 
 function App() {
   const [displayCreateForm, setDisplayCreateForm] = useState(false)
@@ -17,7 +17,7 @@ function App() {
   const [filter, setFilter] = useState("all");
   const [filteredBoards, setFilteredBoards] = useState([])
   const [userId, setUserId] = useState(null)
-  const categories = ["all", "recent", "celebration", "thank you", "inspiration", "my boards"];
+  const categories = ["all", "recent", "celebration", "thank you", "inspiration"];
 
   useEffect(() => {
     receiveBoardList();
@@ -64,7 +64,6 @@ function App() {
             },
         });
         if(response.ok){
-            console.log("response is ok")
             receiveBoardList();
         }
     } catch(err){
@@ -90,10 +89,7 @@ function App() {
       const sortedBoards = boards.sort((a,b) => b.id - a.id);
       const lastThreeBoards = sortedBoards.slice(0,3)
       setFilteredBoards(lastThreeBoards)
-    } else if(filter === 'my boards'){
-      setFilteredBoards(boards.filter(board => board.userId === userId))
-    }
-    else{
+    } else{
       const filtered = boards.filter(board => board.category === filter);
       setFilteredBoards(filtered)
     }
@@ -126,9 +122,9 @@ function App() {
             <Header />
             <main>
               <Routes>
-                <Route path='/' element={<Navigate to="/login" />}/>
-                <Route path='/login' element={<LogIn setUserId={setUserId}/>}/>
-                <Route path='/signup' element={<SignUp/>}/>
+                <Route path='/' element={<Navigate to="/home" />}/>
+                {/* <Route path='/login' element={<LogIn setUserId={setUserId}/>}/>
+                <Route path='/signup' element={<SignUp/>}/> */}
                 <Route
                   path="/home"
                   element={
@@ -144,7 +140,9 @@ function App() {
                         deleteBoard={deleteBoard}
                         handleSetBoardId={handleSetBoardId}
                       />
-                       {displayCreateForm ? <CreateForm displayForm={handleDisplayCreateForm} refreshBoards={receiveBoardList}  formName={"board"}/> : null}
+                       {displayCreateForm ?
+                            <CreateForm displayForm={handleDisplayCreateForm} refreshBoards={receiveBoardList}  formName={"board"}/> :
+                        null}
 
                     </>
                   }/>

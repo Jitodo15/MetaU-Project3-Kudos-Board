@@ -36,6 +36,13 @@
     border-radius: 5px;
 }
 
+.modal-content textarea{
+    width: 85%;
+    padding: 10px;
+    border-radius: 5px;
+
+}
+
 
 form{
     display: flex;

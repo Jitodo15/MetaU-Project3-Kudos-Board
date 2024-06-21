@@ -5,9 +5,11 @@ import CreateButton from "../CreateButton/CreateButton";
 import CreateForm from "../CreateForm/CreateForm";
 import { useParams } from "react-router-dom";
 import CommentForm from "../CommentForm/CommentForm";
+import { useNavigate } from "react-router-dom";
 
 function CardList(props) {
 
+    const navigate = useNavigate()
     const [cards, setCards] = useState([]);
     const { id } = useParams();
     const [displayCreateForm, setDisplayCreateForm] = useState(false)
@@ -28,13 +30,15 @@ function CardList(props) {
         } catch(err){
             console.log(err)
         }
+    }
+
+    function handleNavigateToHome(){
+        navigate("/home")
 
     }
 
     useEffect(() => {
         receiveCardList();
-
-
     }, [id])
 
     function handleDisplayCreateForm(){
@@ -61,9 +65,7 @@ function CardList(props) {
             });
             if(response.ok){
                 receiveCardList()
-
             }
-
         } catch(err){
 
         }
@@ -73,14 +75,30 @@ function CardList(props) {
 
         return(
 
-            <Card key={card.id} cardId={card.id} refreshCards={receiveCardList} handleSelectedCardId={() => handleSelectedCardId(card.id)} upVote={card.upVote} deleteCard={()=> deleteCard(props.boardId, card.id)} author={card.author} handleDisplayCommentForm={handleShowCommentForm} image_url={card.image_url} message={card.message} />
+            <Card
+                key={card.id}
+                cardId={card.id}
+                refreshCards={receiveCardList}
+                handleSelectedCardId={() => handleSelectedCardId(card.id)}
+                upVote={card.upVote}
+                deleteCard={()=> deleteCard(props.boardId, card.id)}
+                author={card.author}
+                handleDisplayCommentForm={handleShowCommentForm}
+                image_url={card.image_url}
+                message={card.message}
+            />
         )
 
     }
 
     return (
         <>
-          {displayCreateForm ? <CreateForm displayForm={handleDisplayCreateForm} refreshCards={receiveCardList} formName={"card"}/> : null}
+        <div className="back-arrow">
+        <i onClick={handleNavigateToHome} className="fa-solid fa-arrow-left"></i>
+        </div>
+          {displayCreateForm ?
+                <CreateForm displayForm={handleDisplayCreateForm} refreshCards={receiveCardList} formName={"card"}/> :
+            null}
             <CreateButton name="Create New Card" displayForm={handleDisplayCreateForm}/>
             <div className="card-list">
                 {cards.map(displayCard)}

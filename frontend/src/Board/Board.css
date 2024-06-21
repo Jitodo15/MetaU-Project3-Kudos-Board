@@ -1,5 +1,5 @@
 .board {
-    border: 1px solid black;
+    border: 1px solid rgb(200, 162, 162);
     padding: 10px;
     border-radius: 5px;
 
@@ -16,6 +16,6 @@
 }
 
 .delete-button {
-    background-color: green;
+    background-color: rgb(200, 162, 162);
     color: white;
 }
