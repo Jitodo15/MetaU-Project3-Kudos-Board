@@ -16,15 +16,20 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("all");
   const [filteredBoards, setFilteredBoards] = useState([])
-  const categories = ["all", "recent", "celebration", "thank you", "inspiration"];
+  const [userId, setUserId] = useState(null)
+  const categories = ["all", "recent", "celebration", "thank you", "inspiration", "my boards"];
 
   useEffect(() => {
     receiveBoardList();
-  }, [])
+  }, [userId])
 
   async function receiveBoardList(){
+
     try{
-        const response = await fetch('http://localhost:3000/boards', {
+        const url = userId
+        ? `http://localhost:3000/boards/user/${userId}`
+        : 'http://localhost:3000/boards'
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -38,6 +43,7 @@ function App() {
     }
 
   }
+
 
   async function handleSearchBoards(query){
     try{
@@ -58,7 +64,7 @@ function App() {
             },
         });
         if(response.ok){
-            setBoards(props.boards.filter(board => board.id !== boardId))
+            console.log("response is ok")
             receiveBoardList();
         }
     } catch(err){
@@ -75,6 +81,8 @@ function App() {
     }
   }
 
+
+
   function handleFilterBoardsCategory(){
     if(filter === "all"){
       setFilteredBoards(boards)
@@ -82,8 +90,10 @@ function App() {
       const sortedBoards = boards.sort((a,b) => b.id - a.id);
       const lastThreeBoards = sortedBoards.slice(0,3)
       setFilteredBoards(lastThreeBoards)
-
-    } else{
+    } else if(filter === 'my boards'){
+      setFilteredBoards(boards.filter(board => board.userId === userId))
+    }
+    else{
       const filtered = boards.filter(board => board.category === filter);
       setFilteredBoards(filtered)
     }
@@ -98,9 +108,6 @@ function App() {
     setFilter(category)
   }
 
-  // function handleDisplayBoardPage() {
-  //   setDisplayBoardPage(!displayBoardPage);
-  // }
 
   function handleDisplayCreateForm(){
     setDisplayCreateForm(!displayCreateForm);
@@ -115,28 +122,39 @@ function App() {
   return (
     <Router>
       <div className='App'>
-            {displayCreateForm ? <CreateForm displayForm={handleDisplayCreateForm} formName={"board"}/> : null}
+
             <Header />
             <main>
               <Routes>
                 <Route path='/' element={<Navigate to="/login" />}/>
-                <Route path='/login' element={<LogIn/>}/>
+                <Route path='/login' element={<LogIn setUserId={setUserId}/>}/>
                 <Route path='/signup' element={<SignUp/>}/>
                 <Route
                   path="/home"
                   element={
-                    <Home
-                      searchQuery={searchQuery}
-                      handleSearchChange={handleSearchChange}
-                      categories={categories}
-                      filter={filter}
-                      handleFilterChange={handleFilterChange}
-                      boards={filteredBoards}
-                      handleDisplayCreateForm={handleDisplayCreateForm}
-                      deleteBoard={deleteBoard}
-                      handleSetBoardId={handleSetBoardId}
-                  />}/>
-                <Route path='/boards/:id/cards' element={<CardList boardId={boardId} displayForm={handleDisplayCreateForm}  />}/>
+                    <>
+                      <Home
+                        searchQuery={searchQuery}
+                        handleSearchChange={handleSearchChange}
+                        categories={categories}
+                        filter={filter}
+                        handleFilterChange={handleFilterChange}
+                        boards={filteredBoards}
+                        handleDisplayCreateForm={handleDisplayCreateForm}
+                        deleteBoard={deleteBoard}
+                        handleSetBoardId={handleSetBoardId}
+                      />
+                       {displayCreateForm ? <CreateForm displayForm={handleDisplayCreateForm} refreshBoards={receiveBoardList}  formName={"board"}/> : null}
+
+                    </>
+                  }/>
+                <Route path='/boards/:id/cards' element={
+                  <>
+
+                     <CardList boardId={boardId} displayForm={handleDisplayCreateForm} />
+                  </>
+
+                  }/>
 
               </Routes>
             </main>

@@ -3,12 +3,13 @@ import bodyParser from 'body-parser';
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 import env from 'dotenv';
+import bcrypt from 'bcrypt';
 
 const app = express();
 const port = 3000;
 const prisma = new PrismaClient()
+const saltRounds = 10;
 env.config();
-
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -59,7 +60,7 @@ app.post("/boards", async (req, res) => {
             data: {
                 title,
                 category,
-                author,
+                // author,
                 image_url,
             }
         })
@@ -74,12 +75,26 @@ app.post("/boards", async (req, res) => {
 
 });
 
+app.get('/boards/user/:userId', async (req, res) => {
+    const {userId} = req.params;
+    try {
+        const boards = await prisma.board.findMany({
+            where: {userId: parseInt(userId)}
+        });
+        res.json(boards)
+
+    } catch(err) {
+        res.status(500).json({err: 'Internal Server Error'})
+    }
+})
+
 app.get("/boards/:boardId/cards", async (req, res) => {
     const boardId = parseInt(req.params.boardId)
 
+
     try{
         const cards = await prisma.card.findMany({
-            where: {boardId}
+            where: {boardId: boardId}
         })
         res.json(cards)
 
@@ -102,7 +117,7 @@ app.post("/boards/:boardId/cards", async (req, res) => {
         const newCard = await prisma.card.create({
             data: {
                 message,
-                author,
+                // author,
                 image_url,
                 upVote : 0,
                 board: {connect: {id: parseInt(boardId)}}
@@ -131,6 +146,7 @@ app.delete("/boards/:boardId", async (req, res) => {
 app.delete("/boards/:boardId/cards/:cardId", async (req, res) => {
     const cardId = parseInt(req.params.cardId)
     try{
+        await prisma.comment.deleteMany({where: {cardId}})
         await prisma.card.delete({where: {id: cardId}})
         res.json({message: 'Card deleted'})
 
@@ -160,7 +176,75 @@ app.get('/boards/search/:query', async (req, res) => {
 
 })
 
+app.post('/cards/:cardId/comments', async(req,res) =>{
+    const cardId = parseInt(req.params.cardId);
+    const {content, authorId} = req.body;
 
+    try{
+        const newComment = await prisma.comment.create({
+            data: {
+                content,
+                // author: {connect: {id: authorId}},
+                card: {connect: {id: cardId}}
+            }
+        });
+        res.json(newComment)
+
+    } catch(err){
+        res.status(500).json({err: 'Internal Server Error'})
+    }
+})
+
+app.get('/cards/:cardId/comments', async(req,res) =>{
+    const cardId = parseInt(req.params.cardId);
+
+    // try{
+        const comments = await prisma.comment.findMany({
+            where: {cardId},
+            // include: {author: true}
+        });
+        res.json(comments)
+
+    // } catch(err){
+    //     res.status(500).json({err: 'Internal Server Error'})
+    // }
+})
+
+app.post('/signup', async (req, res)=> {
+    const {username, password} = req.body;
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
+    console.log(hashedPassword)
+
+    try {
+        const newUser = await prisma.user.create({
+            data: {
+                username,
+                password: hashedPassword
+            }
+        });
+        res.status(201).json(newUser)
+    } catch(err){
+        res.status(500).json({err: 'Internal Server Error'})
+    }
+})
+
+app.post("/login", async (req, res) =>{
+    const {username, password} = req.body;
+
+    try{
+        const user = await prisma.user.findUnique({
+            where: {username}
+        });
+
+        if(!user || !(await bcrypt.compare(password, user.password))){
+            return res.status(401).json({error : "Invalid username or password"})
+        }
+        res.status(200).json({message: 'Login successful', userId: user.id})
+    } catch(err){
+        res.status(500).json({err: 'Internal Server Error'})
+
+    }
+})
 
 
 app.listen(port, () => {

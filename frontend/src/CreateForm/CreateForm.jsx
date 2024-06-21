@@ -1,9 +1,11 @@
 import "./CreateForm.css";
 import React, {useState, useEffect} from "react";
+import { useParams } from "react-router-dom";
 
 function CreateForm(props) {
   const [boards, setBoards] = useState([]);
   const [cards, setCards] = useState([]);
+  const {id} = useParams()
 
 
   async function addBoard(title, category, author){
@@ -17,6 +19,8 @@ function CreateForm(props) {
       })
       const data = await response.json();
       setBoards([...boards, data]);
+      props.refreshBoards()
+
 
     } catch(err){
       console.log(err)
@@ -25,9 +29,10 @@ function CreateForm(props) {
 
   }
 
-  async function addCard(boardId, message, author){
+
+  async function addCard(message, author){
     try{
-      const response = await fetch(`http://localhost:3000/boards/${boardId}/cards`,{
+      const response = await fetch(`http://localhost:3000/boards/${id}/cards`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -36,6 +41,9 @@ function CreateForm(props) {
       })
       const data = await response.json();
       setCards([...cards, data]);
+      props.refreshCards()
+
+
 
     } catch(err){
       console.log(err)
@@ -55,6 +63,7 @@ function CreateForm(props) {
                 const author = e.target.elements[2].value;
                 addBoard(title, category, author);
                 props.displayForm()
+
               }}>
                   <input type="text" placeholder="Title" />
                   <select name="category">
@@ -85,7 +94,7 @@ function CreateForm(props) {
                 e.preventDefault();
                 const message = e.target.elements[0].value;
                 const author = e.target.elements[1].value;
-                addCard(props.boardId, message, author);
+                addCard(message, author);
                 props.displayForm()
               }}>
                   <textarea type="text" name="message" placeholder="Message" />
@@ -95,7 +104,6 @@ function CreateForm(props) {
           </div>
 
       </div>
-
 
     )
 

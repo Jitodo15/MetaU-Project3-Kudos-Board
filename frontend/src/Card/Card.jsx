@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Card.css"
+import CommentList from "../CommentList/CommentList";
 
 function Card(props){
 
@@ -21,13 +22,16 @@ function Card(props){
         <div className="card">
             <p>{props.message}</p>
             <img src={props.image_url} alt="" />
-            <p>Card by {props.author}</p>
+            <p>Card by {props.author? props.author: "anonymous"}</p>
             <div className="card-buttons">
                 <button onClick={handleUpVote}>{voteName}</button>
                 <p>{upVote}</p>
                 <button onClick={props.deleteCard}>Delete Card</button>
-
             </div>
+            <button onClick={() => {
+                props.handleDisplayCommentForm()
+                props.handleSelectedCardId()}}><i className="fa-solid fa-comment"></i></button>
+            <CommentList cardId={props.cardId} refreshComments={props.refreshCards}/>
         </div>
     )
 
