@@ -10,7 +10,7 @@ function CreateForm(props) {
 
   async function addBoard(title, category, author){
     try{
-      const response = await fetch(`${import.meta.VITE_BACKEND_URL}/boards`,{
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/boards`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -18,6 +18,7 @@ function CreateForm(props) {
         body: JSON.stringify({title, category, author})
       })
       const data = await response.json();
+
       setBoards([...boards, data]);
       props.refreshBoards()
 
@@ -32,7 +33,7 @@ function CreateForm(props) {
 
   async function addCard(message, author){
     try{
-      const response = await fetch(`${import.meta.VITE_BACKEND_URL}/boards/${id}/cards`,{
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/boards/${id}/cards`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

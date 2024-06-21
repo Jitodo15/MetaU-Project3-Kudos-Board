@@ -27,8 +27,8 @@ function App() {
 
     try{
         const url = userId
-        ? `${import.meta.VITE_BACKEND_URL}/boards/user/${userId}`
-        : `${import.meta.VITE_BACKEND_URL}/boards`
+        ? `${import.meta.env.VITE_BACKEND_URL}/boards/user/${userId}`
+        : `${import.meta.env.VITE_BACKEND_URL}/boards`
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -47,7 +47,7 @@ function App() {
 
   async function handleSearchBoards(query){
     try{
-      const response = await fetch(`${import.meta.VITE_BACKEND_URL}/boards/search/${query}`)
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/boards/search/${query}`)
       const data = await response.json()
       setBoards(data)
     } catch(err){
@@ -57,7 +57,7 @@ function App() {
 
   async function deleteBoard(boardId){
     try{
-        const response = await fetch(`${import.meta.VITE_BACKEND_URL}/boards/${boardId}`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/boards/${boardId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

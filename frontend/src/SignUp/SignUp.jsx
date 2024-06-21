@@ -13,7 +13,7 @@ function SignUp(){
         event.preventDefault()
         try{
 
-            const response = await fetch(`${import.meta.VITE_BACKEND_URL}/signup`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

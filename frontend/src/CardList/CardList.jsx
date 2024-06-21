@@ -18,7 +18,7 @@ function CardList(props) {
 
     async function receiveCardList(){
         try{
-            const response = await fetch(`${import.meta.VITE_BACKEND_URL}/boards/${id}/cards`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/boards/${id}/cards`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ function CardList(props) {
 
     async function deleteCard(boardId, cardId){
         try{
-            const response = await fetch(`${import.meta.VITE_BACKEND_URL}/boards/${boardId}/cards/${cardId}`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/boards/${boardId}/cards/${cardId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'

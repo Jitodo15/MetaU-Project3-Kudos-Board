@@ -10,7 +10,7 @@ function CommentList(props){
 
     async function fetchComments(){
         try{
-            const response = await fetch(`${import.meta.VITE_BACKEND_URL}/cards/${props.cardId}/comments`)
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/cards/${props.cardId}/comments`)
             const data = await response.json()
             setComments(data);
 

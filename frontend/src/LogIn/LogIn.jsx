@@ -11,7 +11,7 @@ function LogIn(props){
         event.preventDefault()
         try{
 
-            const response = await fetch(`${import.meta.VITE_BACKEND_URL}/login`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
