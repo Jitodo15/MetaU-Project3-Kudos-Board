@@ -123,8 +123,8 @@ function App() {
             <main>
               <Routes>
                 <Route path='/' element={<Navigate to="/home" />}/>
-                {/* <Route path='/login' element={<LogIn setUserId={setUserId}/>}/>
-                <Route path='/signup' element={<SignUp/>}/> */}
+                <Route path='/login' element={<LogIn setUserId={setUserId}/>}/>
+                <Route path='/signup' element={<SignUp/>}/>
                 <Route
                   path="/home"
                   element={
